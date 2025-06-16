@@ -14,6 +14,6 @@ exports.createNewSession = async (userId) => {
 };
 
 exports.getAllSessions = async (userId) => {
-  const result = await getAllChatSessions();
+  const result = await getAllChatSessions(userId);
   return result.rows;
 };

@@ -22,7 +22,9 @@ exports.loginUser = async (username, password) => {
     expiresIn: "15m",
   });
 
-  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET);
+  const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "30d",
+  });
   await updateUserRefreshToken(user.id, refreshToken);
 
   return { accessToken, refreshToken };
@@ -31,7 +33,7 @@ exports.loginUser = async (username, password) => {
 exports.refreshAccessToken = async (refreshToken) => {
   const user = await findUserByRefreshToken(refreshToken);
   if (!user) throw { status: 403, message: "Invalid refresh token" };
-
+  //use  async
   return new Promise((resolve, reject) => {
     jwt.verify(
       refreshToken,

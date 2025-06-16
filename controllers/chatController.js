@@ -5,6 +5,7 @@ const {
   getFallbackSessionId,
   sessionChekByUserId,
 } = require("../services/chatService");
+const { createNewChatSession } = require("../services/chatService");
 
 exports.handleChatMessage = async (req, res) => {
   try {
@@ -38,8 +39,9 @@ exports.fetchChatHistory = async (req, res) => {
 
 exports.deleteSession = async (req, res) => {
   try {
-    const { session_id } = req.params;
-    await deleteChatSession(session_id);
+    const session_id = req.params.sessionID;
+    const user_id = req.user.id;
+    await deleteChatSession(session_id, user_id);
     res.json({ success: true });
   } catch (error) {
     console.error("Error deleting session:", error);
@@ -54,5 +56,16 @@ exports.fetchFallbackSessionId = async (req, res) => {
   } catch (error) {
     console.error("Error fetching fallback session:", error);
     res.status(500).json({ error: "Failed to fetch fallback session ID" });
+  }
+};
+
+exports.createChatSession = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const result = await createNewChatSession(user_id);
+    res.status(201).json({ session_id: result.chat_session_id });
+  } catch (error) {
+    console.error("Error creating chat session:", error);
+    res.status(500).json({ error: "Failed to create session" });
   }
 };

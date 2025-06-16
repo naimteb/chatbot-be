@@ -8,6 +8,8 @@ exports.createChatSession = async (userId) => {
 };
 
 exports.getAllChatSessions = async (userId) => {
+  console.log("user_id:", userId);
+
   return await pool.query(
     "SELECT chat_session_id, title  from chat_sessions where user_id=$1 ORDER by created_at",
     [userId]

@@ -8,6 +8,7 @@ const {
   getAnyExistingSessionId,
   getSessionCheckByUserId,
 } = require("../models/chatModel");
+const { createChatSessionInDB } = require("../models/chatModel");
 
 exports.processChatMessage = async (request, session_id) => {
   const result = await responseFromBotKnowledge(request);
@@ -36,11 +37,16 @@ exports.sessionChekByUserId = async (sessionID, user_id) => {
   const result = await getSessionCheckByUserId(sessionID, user_id);
   return result.rows;
 };
-exports.deleteChatSession = async (session_id) => {
-  await deleteChatBySessionId(session_id);
+exports.deleteChatSession = async (session_id, user_id) => {
+  await deleteChatBySessionId(session_id, user_id);
 };
 
 exports.getFallbackSessionId = async () => {
   const result = await getAnyExistingSessionId();
   return result.rows;
+};
+
+exports.createNewChatSession = async (user_id) => {
+  const result = await createChatSessionInDB(user_id);
+  return result.rows[0];
 };

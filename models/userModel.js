@@ -29,3 +29,4 @@ exports.clearUserRefreshToken = async (token) => {
     [token]
   );
 };
+//refresh token must be unique
